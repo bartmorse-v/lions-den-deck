@@ -166,26 +166,22 @@
       top: 50%;
       transform: translateY(-50%);
       z-index: 100;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.18);
-      color: rgba(255,255,255,0.7);
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      font-size: 1.2rem;
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.35);
+      width: 28px;
+      height: 48px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background 0.2s, color 0.2s, border-color 0.2s;
+      font-size: 1.4rem;
+      transition: color 0.2s;
+      padding: 0;
     }
-    #btn-prev:hover, #btn-next:hover {
-      background: rgba(241,196,15,0.15);
-      border-color: var(--gold);
-      color: var(--gold);
-    }
-    #btn-prev { left: 16px; }
-    #btn-next { right: 16px; }
+    #btn-prev:hover, #btn-next:hover { color: var(--gold); }
+    #btn-prev { left: 10px; }
+    #btn-next { right: 10px; }
 
     /* ─── Progress bar ───────────────────────────── */
     #progress {
