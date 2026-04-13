@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lion's Den Program 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold:      #f1c40f;
+      --gold-dim:  rgba(241,196,15,0.18);
+      --gold-mid:  rgba(241,196,15,0.5);
+      --bg:        #080808;
+      --white:     #ffffff;
+      --gray:      #aaaaaa;
+      --text-mid:  rgba(255,255,255,0.78);
+      --text-soft: rgba(255,255,255,0.5);
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg);
+      color: var(--white);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── Deck container ─────────────────────────── */
+    #deck {
+      position: relative;
+      width: 100vw; height: 100vh;
+    }
+
+    /* ─── Individual slides ──────────────────────── */
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 5vw 6vw;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.45s ease;
+      overflow: hidden;
+    }
+    .slide.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    /* ─── Background image utility ───────────────── */
+    .bg-img {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      z-index: 0;
+    }
+    .bg-img::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+    }
+    .slide-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* ─── Typography ─────────────────────────────── */
+    .eyebrow {
+      font-size: clamp(0.65rem, 1vw, 0.8rem);
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.6em;
+    }
+    .stage-badge {
+      display: inline-block;
+      background: var(--gold);
+      color: #000;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      margin-bottom: 1rem;
+    }
+    h1.display {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3.5rem, 8vw, 7rem);
+      line-height: 0.95;
+      letter-spacing: 0.03em;
+      color: var(--white);
+    }
+    h1.display span { color: var(--gold); }
+    h2.section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 5vw, 4.2rem);
+      letter-spacing: 0.04em;
+      line-height: 1;
+      color: var(--white);
+    }
+    h2.section-title .gold { color: var(--gold); }
+    h3.stage-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.8rem, 6vw, 5.5rem);
+      letter-spacing: 0.04em;
+      line-height: 0.95;
+      color: var(--gold);
+      margin-bottom: 0.3em;
+    }
+    .subtitle {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: clamp(0.95rem, 1.5vw, 1.2rem);
+      color: var(--text-mid);
+      margin-bottom: 2rem;
+      max-width: 640px;
+    }
+    .rule {
+      width: 60px; height: 3px;
+      background: var(--gold);
+      margin-bottom: 1.8rem;
+    }
+
+    /* ─── Nav ────────────────────────────────────── */
+    #nav {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 100;
+    }
+    .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .dot.active { background: var(--gold); transform: scale(1.3); }
+
+    #slide-counter {
+      position: fixed;
+      bottom: 24px;
+      right: 32px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.3);
+      z-index: 100;
+    }
+
+    #arrow-hint {
+      position: fixed;
+      bottom: 24px;
+      left: 32px;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      color: rgba(255,255,255,0.25);
+      z-index: 100;
+    }
+
+    /* ─── Progress bar ───────────────────────────── */
+    #progress {
+      position: fixed;
+      bottom: 0; left: 0;
+      height: 3px;
+      background: var(--gold);
+      transition: width 0.4s ease;
+      z-index: 100;
+    }
+
+    /* ══════════════════════════════════════════════
+       SLIDE 1 — COVER
+    ══════════════════════════════════════════════ */
+    #s1 .bg-img {
+      background-image: url('img/cover.png');
+      filter: grayscale(20%);
+    }
+    #s1 .bg-img::after {
+      background: radial-gradient(ellipse at center, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.75) 100%);
+    }
+    #s1 .slide-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      height: 100%;
+    }
+    .lion-icon {
+      font-size: clamp(2.5rem, 4vw, 3.5rem);
+      margin-bottom: 0.5rem;
+      filter: drop-shadow(0 0 20px rgba(241,196,15,0.6));
+    }
+    .cover-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 10vw, 9rem);
+      letter-spacing: 0.08em;
+      line-height: 0.9;
+      color: var(--white);
+      text-shadow: 0 4px 40px rgba(0,0,0,0.8);
+    }
+    .cover-title .den { color: var(--gold); }
+    .cover-sub {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.2rem, 2.5vw, 2rem);
+      letter-spacing: 0.5em;
+      color: rgba(255,255,255,0.7);
+      margin-top: 0.5rem;
+    }
+    .cover-year {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.2rem, 2vw, 1.6rem);
+      letter-spacing: 0.6em;
+      color: var(--gold);
+      margin-top: 1.2rem;
+    }
+
+    /* ══════════════════════════════════════════════
+       SLIDE 2 — JOURNEY MAP
+    ══════════════════════════════════════════════ */
+    #s2 {
+      background: #0a0a0a;
+      justify-content: flex-start;
+      padding-top: 4vh;
+    }
+    .journey-header {
+      margin-bottom: clamp(1.5rem, 3vh, 2.5rem);
+    }
+    .journey-cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      width: 100%;
+    }
+    .jcard {
+      position: relative;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: clamp(16px, 2vw, 24px);
+      display: flex;
+      flex-direction: column;
+      min-height: clamp(200px, 28vh, 280px);
+    }
+    .jcard.destination {
+      border-color: var(--gold);
+      background: rgba(241,196,15,0.07);
+    }
+    .jcard-num {
+      width: clamp(36px, 4vw, 48px);
+      height: clamp(36px, 4vw, 48px);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.2rem, 2vw, 1.6rem);
+      margin-bottom: 1rem;
+      flex-shrink: 0;
+    }
+    .jcard-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.3rem, 2.2vw, 1.8rem);
+      letter-spacing: 0.04em;
+      margin-bottom: 0.5rem;
+    }
+    .jcard-sub {
+      font-size: clamp(0.75rem, 1.1vw, 0.88rem);
+      color: var(--text-soft);
+      font-style: italic;
+      line-height: 1.4;
+      flex: 1;
+    }
+    .jcard-tag {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-top: 1rem;
+    }
+    .arrow-connector {
+      position: absolute;
+      right: -10px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      z-index: 3;
+      color: rgba(255,255,255,0.25);
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    /* Stage 1 - gray */
+    .jcard:nth-child(1) .jcard-num { background: rgba(107,114,128,0.3); color: #9ca3af; border: 1px solid #4b5563; }
+    .jcard:nth-child(1) .jcard-name { color: #9ca3af; }
+    /* Stage 2 - blue */
+    .jcard:nth-child(2) .jcard-num { background: rgba(74,144,217,0.2); color: #74b9ff; border: 1px solid #4a90d9; }
+    .jcard:nth-child(2) .jcard-name { color: #74b9ff; }
+    /* Stage 3 - orange */
+    .jcard:nth-child(3) .jcard-num { background: rgba(224,123,57,0.2); color: #f0956a; border: 1px solid #e07b39; }
+    .jcard:nth-child(3) .jcard-name { color: #f0956a; }
+    /* Stage 4 - gold */
+    .jcard:nth-child(4) .jcard-num { background: rgba(241,196,15,0.2); color: var(--gold); border: 1px solid var(--gold); }
+    .jcard:nth-child(4) .jcard-name { color: var(--gold); }
+
+    .journey-footer {
+      margin-top: clamp(1rem, 2vh, 1.5rem);
+      font-size: clamp(0.7rem, 1vw, 0.8rem);
+      color: var(--text-soft);
+      font-style: italic;
+      letter-spacing: 0.08em;
+    }
+
+    /* ══════════════════════════════════════════════
+       STAGE SLIDES (3–6) — shared
+    ══════════════════════════════════════════════ */
+    .stage-slide .bg-img::after {
+      background: linear-gradient(to right,
+        rgba(5,5,5,0.96) 0%,
+        rgba(5,5,5,0.88) 45%,
+        rgba(5,5,5,0.5)  70%,
+        rgba(5,5,5,0.25) 100%);
+    }
+    .stage-slide .slide-content {
+      max-width: 58%;
+    }
+    .bullet-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.6rem 2rem;
+      margin-top: 0.5rem;
+    }
+    .bullet-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: clamp(0.8rem, 1.3vw, 0.95rem);
+      color: var(--text-mid);
+      line-height: 1.5;
+    }
+    .bullet-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--gold);
+      margin-top: 0.4em;
+      flex-shrink: 0;
+    }
+    .pillar-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      margin-top: 0.5rem;
+    }
+    .pillar {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .pillar-bar {
+      width: 4px;
+      min-height: 48px;
+      flex-shrink: 0;
+      border-radius: 2px;
+    }
+    .pillar-title {
+      font-weight: 700;
+      font-size: clamp(0.85rem, 1.3vw, 1rem);
+      margin-bottom: 3px;
+    }
+    .pillar-body {
+      font-size: clamp(0.75rem, 1.1vw, 0.88rem);
+      color: var(--text-mid);
+      line-height: 1.5;
+    }
+    .slide-cta {
+      margin-top: 2rem;
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: clamp(0.85rem, 1.4vw, 1.05rem);
+      color: var(--gold);
+    }
+
+    /* ══════════════════════════════════════════════
+       SLIDE 3 — STAGE 4: GARDEN STATE
+    ══════════════════════════════════════════════ */
+    #s3 .bg-img { background-image: url('img/garden.png'); }
+
+    /* ══════════════════════════════════════════════
+       SLIDE 4 — STAGE 3: FLAMES
+    ══════════════════════════════════════════════ */
+    #s4 .bg-img { background-image: url('img/flames.png'); }
+    #s4 .pillar-bar { background: #e07b39; }
+    #s4 h3.stage-name { color: #f0956a; }
+
+    /* ══════════════════════════════════════════════
+       SLIDE 5 — STAGE 2: THE BRIDGE
+    ══════════════════════════════════════════════ */
+    #s5 .bg-img { background-image: url('img/bridge.png'); }
+    #s5 h3.stage-name { color: #74b9ff; }
+    .from-to-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+    .from-to-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .ft-box {
+      flex: 1;
+      padding: clamp(8px, 1.2vw, 12px) clamp(12px, 1.5vw, 18px);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1rem, 1.8vw, 1.4rem);
+      letter-spacing: 0.06em;
+    }
+    .ft-from {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.5);
+    }
+    .ft-to {
+      background: rgba(74,144,217,0.15);
+      border: 1px solid #4a90d9;
+      color: #74b9ff;
+    }
+    .ft-arrow { color: rgba(255,255,255,0.35); font-size: 1.2rem; flex-shrink: 0; }
+    .ft-desc {
+      font-size: clamp(0.72rem, 1vw, 0.82rem);
+      color: var(--text-soft);
+      font-style: italic;
+      padding-left: 4px;
+      line-height: 1.4;
+    }
+    .bridge-quote {
+      margin-top: 1.5rem;
+      padding: 14px 18px;
+      border-left: 3px solid #4a90d9;
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: clamp(0.85rem, 1.3vw, 1rem);
+      color: var(--text-mid);
+      line-height: 1.5;
+    }
+
+    /* ══════════════════════════════════════════════
+       SLIDE 6 — STAGE 1: SPACE
+    ══════════════════════════════════════════════ */
+    #s6 .bg-img { background-image: url('img/space.png'); }
+    #s6 h3.stage-name { color: #9ca3af; }
+    .two-col-table {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 2rem;
+      margin-top: 0.5rem;
+    }
+    .col-header {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+      margin-bottom: 0.8rem;
+    }
+    .col-header.current { color: #9ca3af; }
+    .col-header.solution { color: var(--gold); }
+    .col-items {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+    .col-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: clamp(0.78rem, 1.2vw, 0.9rem);
+      color: var(--text-mid);
+      line-height: 1.45;
+    }
+    .col-item .marker {
+      width: 6px; height: 6px;
+      border-radius: 1px;
+      margin-top: 0.45em;
+      flex-shrink: 0;
+    }
+    .col-item.current .marker { background: #6b7280; }
+    .col-item.solution .marker { background: var(--gold); }
+
+    /* ══════════════════════════════════════════════
+       SLIDE 7 — WHY LION'S DEN
+    ══════════════════════════════════════════════ */
+    #s7 { background: #0a0a0a; justify-content: flex-start; padding-top: 4vh; }
+    .compare-table {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 0 clamp(16px, 2vw, 28px);
+      margin-top: clamp(1rem, 2vh, 1.5rem);
+      width: 100%;
+    }
+    .col-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 10px 16px;
+      margin-bottom: 8px;
+    }
+    .col-label.trad {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.4);
+    }
+    .col-label.ld {
+      background: rgba(241,196,15,0.12);
+      border: 1px solid var(--gold);
+      color: var(--gold);
+    }
+    .vs-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      color: rgba(255,255,255,0.2);
+      align-self: center;
+    }
+    .compare-rows {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .compare-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: clamp(8px, 1vh, 11px) 14px;
+      font-size: clamp(0.75rem, 1.1vw, 0.88rem);
+      line-height: 1.4;
+    }
+    .compare-row.trad-row {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      color: rgba(255,255,255,0.4);
+    }
+    .compare-row.ld-row {
+      background: rgba(241,196,15,0.06);
+      border: 1px solid rgba(241,196,15,0.2);
+      color: var(--text-mid);
+    }
+    .compare-row .icon {
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+    .compare-row.trad-row .icon { color: rgba(255,255,255,0.25); }
+    .compare-row.ld-row .icon { color: var(--gold); }
+    .compare-footer {
+      margin-top: clamp(0.8rem, 1.5vh, 1.2rem);
+      font-weight: 700;
+      font-size: clamp(0.8rem, 1.2vw, 0.95rem);
+      text-align: center;
+      color: var(--white);
+    }
+
+    /* ══════════════════════════════════════════════
+       SLIDE 8 — EVERYTHING INCLUDED
+    ══════════════════════════════════════════════ */
+    #s8 { background: #0a0a0a; justify-content: flex-start; padding-top: 4vh; }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: clamp(8px, 1vw, 14px);
+      margin-top: clamp(1rem, 2vh, 1.5rem);
+      width: 100%;
+    }
+    .feature-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-left: 3px solid var(--gold);
+      padding: clamp(14px, 1.5vw, 20px);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .feature-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.2rem, 1.8vw, 1.5rem);
+      color: var(--gold);
+      line-height: 1;
+    }
+    .feature-title {
+      font-weight: 700;
+      font-size: clamp(0.8rem, 1.1vw, 0.92rem);
+      color: var(--white);
+      line-height: 1.3;
+    }
+    .feature-body {
+      font-size: clamp(0.7rem, 0.9vw, 0.8rem);
+      color: var(--text-soft);
+      line-height: 1.4;
+    }
+
+    /* ══════════════════════════════════════════════
+       SLIDE 9 — INVESTMENT
+    ══════════════════════════════════════════════ */
+    #s9 { background: #0a0a0a; justify-content: flex-start; padding-top: 4vh; }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(12px, 1.5vw, 20px);
+      margin-top: clamp(1rem, 2vh, 1.5rem);
+      width: 100%;
+    }
+    .price-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: clamp(20px, 2.5vw, 32px) clamp(16px, 2vw, 24px);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .price-card.featured {
+      border-color: var(--gold);
+      background: rgba(241,196,15,0.07);
+    }
+    .price-card.premium {
+      border-color: rgba(255,255,255,0.4);
+      background: rgba(255,255,255,0.05);
+    }
+    .price-badge {
+      display: inline-block;
+      font-size: 0.62rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      margin-bottom: 4px;
+    }
+    .price-badge.best { background: var(--gold); color: #000; }
+    .price-badge.premium-b { background: rgba(255,255,255,0.15); color: #fff; }
+    .price-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-soft);
+    }
+    .price-amount {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      line-height: 1;
+      color: var(--white);
+    }
+    .price-card.featured .price-amount { color: var(--gold); }
+    .price-sub {
+      font-style: italic;
+      font-size: clamp(0.75rem, 1vw, 0.85rem);
+      color: var(--text-soft);
+      font-family: 'DM Serif Display', serif;
+      margin-bottom: 4px;
+    }
+    .price-rule {
+      height: 1px;
+      background: rgba(255,255,255,0.12);
+    }
+    .price-card.featured .price-rule { background: var(--gold-mid); }
+    .price-items {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .price-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: clamp(0.75rem, 1vw, 0.85rem);
+      color: var(--text-mid);
+      line-height: 1.4;
+    }
+    .price-item .check { color: var(--gold); flex-shrink: 0; }
+    .pricing-footer {
+      margin-top: clamp(1rem, 1.5vh, 1.4rem);
+      text-align: center;
+      font-size: clamp(0.75rem, 1vw, 0.85rem);
+      color: var(--text-soft);
+    }
+    .pricing-footer span { color: var(--gold); font-weight: 600; }
+
+  </style>
+</head>
+<body>
+
+<div id="deck">
+
+  <!-- ══ SLIDE 1: COVER ══ -->
+  <div class="slide active" id="s1">
+    <div class="bg-img"></div>
+    <div class="slide-content">
+      <div class="lion-icon">🦁</div>
+      <div class="cover-title">LION'S<span class="den">DEN</span></div>
+      <div class="cover-sub">P R O G R A M</div>
+      <div class="cover-year">2 0 2 6</div>
+    </div>
+  </div>
+
+  <!-- ══ SLIDE 2: JOURNEY MAP ══ -->
+  <div class="slide" id="s2">
+    <div class="slide-content">
+      <div class="journey-header">
+        <div class="eyebrow">The Roadmap</div>
+        <h2 class="section-title">YOUR TRANSFORMATION <span class="gold">JOURNEY</span></h2>
+        <p class="subtitle">We present the destination first — so you know exactly where you're headed.</p>
+      </div>
+      <div class="journey-cards">
+        <div class="jcard" style="position:relative;">
+          <div class="jcard-num">1</div>
+          <div class="jcard-name">SPACE</div>
+          <div class="jcard-sub">Where most men find us. Isolated, reactive, carrying the weight alone.</div>
+          <div class="jcard-tag" style="color:#6b7280;">START HERE</div>
+          <div class="arrow-connector">→</div>
+        </div>
+        <div class="jcard" style="position:relative;">
+          <div class="jcard-num">2</div>
+          <div class="jcard-name">THE BRIDGE</div>
+          <div class="jcard-sub">Building trust. Relearning how to show up without shutting down.</div>
+          <div class="jcard-tag" style="color:#4a90d9;">BUILDING TRUST</div>
+          <div class="arrow-connector">→</div>
+        </div>
+        <div class="jcard" style="position:relative;">
+          <div class="jcard-num">3</div>
+          <div class="jcard-name">FLAMES</div>
+          <div class="jcard-sub">Reigniting passion. Romance as discipline, not accident.</div>
+          <div class="jcard-tag" style="color:#e07b39;">REIGNITING PASSION</div>
+          <div class="arrow-connector">→</div>
+        </div>
+        <div class="jcard destination">
+          <div class="jcard-num">4</div>
+          <div class="jcard-name">THE GARDEN STATE</div>
+          <div class="jcard-sub">Leading proactively. A marriage that energizes you both.</div>
+          <div class="jcard-tag" style="color:var(--gold);">YOUR DESTINATION</div>
+        </div>
+      </div>
+      <div class="journey-footer">Most men start at Stage 1. The work begins the moment you decide to move.</div>
+    </div>
+  </div>
+
+  <!-- ══ SLIDE 3: STAGE 4 — THE GARDEN STATE ══ -->
+  <div class="slide stage-slide" id="s3">
+    <div class="bg-img"></div>
+    <div class="slide-content">
+      <div class="stage-badge">Stage 4</div>
+      <h3 class="stage-name">THE GARDEN STATE</h3>
+      <p class="subtitle">Where you're headed — your destination as a man, husband, and leader.</p>
+      <div class="rule"></div>
+      <div class="bullet-grid">
+        <div class="bullet-item"><div class="bullet-dot"></div><span>Leading proactively — not reactively</span></div>
+        <div class="bullet-item"><div class="bullet-dot"></div><span>Fully present at home with your family</span></div>
+        <div class="bullet-item"><div class="bullet-dot"></div><span>Creating attraction, not chasing approval</span></div>
+        <div class="bullet-item"><div class="bullet-dot"></div><span>Leading with confidence at work</span></div>
+        <div class="bullet-item"><div class="bullet-dot"></div><span>Handling conflict without shutting down</span></div>
+        <div class="bullet-item"><div class="bullet-dot"></div><span>Your wife feeling cherished and pursued</span></div>
+        <div class="bullet-item"><div class="bullet-dot"></div><span>Living purpose-driven and God-centered</span></div>
+        <div class="bullet-item"><div class="bullet-dot"></div><span>A marriage that energizes you both</span></div>
+      </div>
+      <div class="slide-cta">Does this sound like what you're hoping for?</div>
+    </div>
+  </div>
+
+  <!-- ══ SLIDE 4: STAGE 3 — FLAMES ══ -->
+  <div class="slide stage-slide" id="s4">
+    <div class="bg-img"></div>
+    <div class="slide-content">
+      <div class="stage-badge" style="background:#e07b39;">Stage 3</div>
+      <h3 class="stage-name">FLAMES</h3>
+      <p class="subtitle">Reigniting passion — romance as discipline, not accident.</p>
+      <div class="rule" style="background:#e07b39;"></div>
+      <div class="pillar-list">
+        <div class="pillar">
+          <div class="pillar-bar"></div>
+          <div>
+            <div class="pillar-title" style="color:#f0956a;">Consistent Physical Affection</div>
+            <div class="pillar-body">Touch and presence become intentional practices, not just reactions.</div>
+          </div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-bar"></div>
+          <div>
+            <div class="pillar-title" style="color:#f0956a;">Verbal Affirmation as Habit</div>
+            <div class="pillar-body">Speaking life into your wife regularly — meaningful, not mechanical.</div>
+          </div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-bar"></div>
+          <div>
+            <div class="pillar-title" style="color:#f0956a;">Romance as a Decision</div>
+            <div class="pillar-body">You plan and pursue — spontaneity is the byproduct of discipline.</div>
+          </div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-bar"></div>
+          <div>
+            <div class="pillar-title" style="color:#f0956a;">Attraction Through Leadership</div>
+            <div class="pillar-body">Her desire follows your growth. You stop chasing and start leading.</div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-cta" style="color:#f0956a;">How does a marriage like that sound to you?</div>
+    </div>
+  </div>
+
+  <!-- ══ SLIDE 5: STAGE 2 — THE BRIDGE ══ -->
+  <div class="slide stage-slide" id="s5">
+    <div class="bg-img"></div>
+    <div class="slide-content">
+      <div class="stage-badge" style="background:#4a90d9;">Stage 2</div>
+      <h3 class="stage-name">THE BRIDGE</h3>
+      <p class="subtitle">Trust must be built before romance can grow. You can't skip this stage.</p>
+      <div class="rule" style="background:#4a90d9;"></div>
+      <div class="from-to-grid">
+        <div>
+          <div class="from-to-row">
+            <div class="ft-box ft-from">REACTING</div>
+            <div class="ft-arrow">→</div>
+            <div class="ft-box ft-to">RESPONDING</div>
+          </div>
+          <div class="ft-desc">Emotional regulation so conversations don't escalate into shutdowns or outbursts.</div>
+        </div>
+        <div>
+          <div class="from-to-row">
+            <div class="ft-box ft-from">PLEASING</div>
+            <div class="ft-arrow">→</div>
+            <div class="ft-box ft-to">SERVING</div>
+          </div>
+          <div class="ft-desc">Move from people-pleasing out of fear to genuinely serving out of strength and love.</div>
+        </div>
+        <div>
+          <div class="from-to-row">
+            <div class="ft-box ft-from">DEFENDING</div>
+            <div class="ft-arrow">→</div>
+            <div class="ft-box ft-to">LISTENING</div>
+          </div>
+          <div class="ft-desc">Drop the armor. Learn to hear her without making it about you.</div>
+        </div>
+      </div>
+      <div class="bridge-quote">"Trust is the bridge. You can't build romance on a broken foundation."</div>
+    </div>
+  </div>
+
+  <!-- ══ SLIDE 6: STAGE 1 — SPACE ══ -->
+  <div class="slide stage-slide" id="s6">
+    <div class="bg-img"></div>
+    <div class="slide-content">
+      <div class="stage-badge" style="background:#6b7280;">Stage 1</div>
+      <h3 class="stage-name">SPACE</h3>
+      <p class="subtitle">Where most men are when they find us. This is where the work begins.</p>
+      <div class="rule" style="background:#6b7280;"></div>
+      <div class="two-col-table">
+        <div>
+          <div class="col-header current">Current Reality</div>
+          <div class="col-items">
+            <div class="col-item current"><div class="marker"></div><span>False identity — performing instead of leading</span></div>
+            <div class="col-item current"><div class="marker"></div><span>Walking on eggshells in your own home</span></div>
+            <div class="col-item current"><div class="marker"></div><span>Taking 100% ownership of the relationship</span></div>
+            <div class="col-item current"><div class="marker"></div><span>Facing your lions alone</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="col-header solution">What We Do</div>
+          <div class="col-items">
+            <div class="col-item solution"><div class="marker"></div><span>Reveal who you were made to be</span></div>
+            <div class="col-item solution"><div class="marker"></div><span>Give you tools to reestablish peace</span></div>
+            <div class="col-item solution"><div class="marker"></div><span>Help you carry the right weight — no more</span></div>
+            <div class="col-item solution"><div class="marker"></div><span>Walk beside you every step of the way</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-cta" style="color:#9ca3af;">Every hero's journey starts in the dark. The question is — will you take the first step?</div>
+    </div>
+  </div>
+
+  <!-- ══ SLIDE 7: WHY LION'S DEN ══ -->
+  <div class="slide" id="s7">
+    <div class="slide-content" style="width:100%;">
+      <div class="eyebrow">The Difference</div>
+      <h2 class="section-title">WHY <span class="gold">LION'S DEN?</span></h2>
+      <p class="subtitle" style="margin-bottom:0;">The volume and depth of support is unlike anything else.</p>
+      <div class="compare-table">
+        <div>
+          <div class="col-label trad">Traditional Counseling</div>
+          <div class="compare-rows">
+            <div class="compare-row trad-row"><span class="icon">✗</span> 8–12 weekly sessions (then done)</div>
+            <div class="compare-row trad-row"><span class="icon">✗</span> 1 therapist, limited tools</div>
+            <div class="compare-row trad-row"><span class="icon">✗</span> No contact between sessions</div>
+            <div class="compare-row trad-row"><span class="icon">✗</span> One-size-fits-all approach</div>
+            <div class="compare-row trad-row"><span class="icon">✗</span> No peer support or community</div>
+            <div class="compare-row trad-row"><span class="icon">✗</span> No ongoing accountability</div>
+          </div>
+        </div>
+        <div class="vs-badge">VS</div>
+        <div>
+          <div class="col-label ld">Lion's Den</div>
+          <div class="compare-rows">
+            <div class="compare-row ld-row"><span class="icon">✓</span> 8–12 weeks of dedicated 1:1 sessions</div>
+            <div class="compare-row ld-row"><span class="icon">✓</span> Dozens of tools &amp; the Repair Roadmap</div>
+            <div class="compare-row ld-row"><span class="icon">✓</span> 24/7 text + voice memo access</div>
+            <div class="compare-row ld-row"><span class="icon">✓</span> 12-month mastermind (2x/week Zoom)</div>
+            <div class="compare-row ld-row"><span class="icon">✓</span> Private community — app &amp; desktop</div>
+            <div class="compare-row ld-row"><span class="icon">✓</span> 12-week course + vault of call recordings</div>
+          </div>
+        </div>
+      </div>
+      <div class="compare-footer">There is simply nothing else like this for marriage.</div>
+    </div>
+  </div>
+
+  <!-- ══ SLIDE 8: EVERYTHING INCLUDED ══ -->
+  <div class="slide" id="s8">
+    <div class="slide-content" style="width:100%;">
+      <div class="eyebrow">What You Get</div>
+      <h2 class="section-title">EVERYTHING <span class="gold">INCLUDED</span></h2>
+      <p class="subtitle" style="margin-bottom:0;">Every tool, resource, and relationship you need — under one roof.</p>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-num">01</div>
+          <div class="feature-title">1:1 Coaching Sessions</div>
+          <div class="feature-body">8–12 weeks of dedicated time with your coach</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-num">02</div>
+          <div class="feature-title">Repair Roadmap</div>
+          <div class="feature-body">Dozens of tools &amp; frameworks for your marriage</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-num">03</div>
+          <div class="feature-title">24/7 Text + Voice Memo</div>
+          <div class="feature-body">Direct access to your coach between sessions</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-num">04</div>
+          <div class="feature-title">12-Month Mastermind</div>
+          <div class="feature-body">2x/week Zoom with a brotherhood of men</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-num">05</div>
+          <div class="feature-title">Private Community</div>
+          <div class="feature-body">App &amp; desktop — always-on peer support</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-num">06</div>
+          <div class="feature-title">12-Week Course</div>
+          <div class="feature-body">Video &amp; written modules you keep forever</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-num">07</div>
+          <div class="feature-title">Call Recording Vault</div>
+          <div class="feature-body">Library of real coaching calls to learn from</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-num">08</div>
+          <div class="feature-title">Monthly Challenges</div>
+          <div class="feature-body">Targeted exercises to build real-world habits</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SLIDE 9: INVESTMENT ══ -->
+  <div class="slide" id="s9">
+    <div class="slide-content" style="width:100%;">
+      <div class="eyebrow">Enrollment</div>
+      <h2 class="section-title">YOUR <span class="gold">INVESTMENT</span></h2>
+      <p class="subtitle" style="margin-bottom:0;">Every option includes full access to the program. Choose what works best for you.</p>
+      <div class="pricing-grid">
+        <div class="price-card featured">
+          <div><div class="price-badge best">Best Value</div></div>
+          <div class="price-label">Pay in Full</div>
+          <div class="price-amount">$5,000</div>
+          <div class="price-sub">Individual — save $1,500 vs flex pay</div>
+          <div class="price-rule"></div>
+          <div class="price-items">
+            <div class="price-item"><span class="check">✓</span> Full program access</div>
+            <div class="price-item"><span class="check">✓</span> All 8 inclusions</div>
+            <div class="price-item"><span class="check">✓</span> Save $1,500 vs flex pay</div>
+          </div>
+        </div>
+        <div class="price-card premium">
+          <div><div class="price-badge premium-b">Most Powerful</div></div>
+          <div class="price-label">Both Partners</div>
+          <div class="price-amount">$10,000</div>
+          <div class="price-sub">Full program for husband &amp; wife</div>
+          <div class="price-rule"></div>
+          <div class="price-items">
+            <div class="price-item"><span class="check">✓</span> Most powerful transformation</div>
+            <div class="price-item"><span class="check">✓</span> Full access for both spouses</div>
+            <div class="price-item"><span class="check">✓</span> All tools, calls, community</div>
+          </div>
+        </div>
+        <div class="price-card">
+          <div style="height:22px;"></div>
+          <div class="price-label">Flex Pay</div>
+          <div class="price-amount">$6,500</div>
+          <div class="price-sub">$2,500 down + $4,000 — split into 2 payments</div>
+          <div class="price-rule"></div>
+          <div class="price-items">
+            <div class="price-item"><span class="check" style="color:var(--gray);">✓</span> Full program access</div>
+            <div class="price-item"><span class="check" style="color:var(--gray);">✓</span> Split into 2 payments</div>
+            <div class="price-item"><span class="check" style="color:var(--gray);">ℹ</span> $750 cancellation fee applies</div>
+          </div>
+        </div>
+      </div>
+      <div class="pricing-footer">Monthly plan available: <span>$330/month</span> &nbsp;·&nbsp; Ongoing access to tools, community &amp; coaching support</div>
+    </div>
+  </div>
+
+</div><!-- /deck -->
+
+<!-- Navigation dots -->
+<div id="nav">
+  <div class="dot active" onclick="goTo(0)"></div>
+  <div class="dot" onclick="goTo(1)"></div>
+  <div class="dot" onclick="goTo(2)"></div>
+  <div class="dot" onclick="goTo(3)"></div>
+  <div class="dot" onclick="goTo(4)"></div>
+  <div class="dot" onclick="goTo(5)"></div>
+  <div class="dot" onclick="goTo(6)"></div>
+  <div class="dot" onclick="goTo(7)"></div>
+  <div class="dot" onclick="goTo(8)"></div>
+</div>
+
+<div id="slide-counter">1 / 9</div>
+<div id="arrow-hint">← → or click</div>
+<div id="progress" style="width:11.1%"></div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const dots   = document.querySelectorAll('.dot');
+  const counter = document.getElementById('slide-counter');
+  const progress = document.getElementById('progress');
+  let current = 0;
+
+  function goTo(n) {
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = Math.max(0, Math.min(n, slides.length - 1));
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+    counter.textContent = (current + 1) + ' / ' + slides.length;
+    progress.style.width = ((current + 1) / slides.length * 100) + '%';
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'ArrowDown') {
+      e.preventDefault();
+      goTo(current + 1);
+    }
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      goTo(current - 1);
+    }
+  });
+
+  // Click anywhere on slide to advance (but not on nav dots)
+  document.getElementById('deck').addEventListener('click', () => goTo(current + 1));
+</script>
+
+</body>
+</html>
