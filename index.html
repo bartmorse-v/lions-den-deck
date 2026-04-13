@@ -872,63 +872,59 @@
     </div>
   </div>
 
-  <!-- ══ SLIDE 6: STAGE 1 — SPACE / WHIP ══ -->
-  <div class="slide" id="s6" style="background:#080808; justify-content:center; overflow:hidden;">
+  <!-- ══ SLIDE 6: STAGE 1 — SPACE ══ -->
+  <div class="slide stage-slide" id="s6">
+    <div class="bg-img"></div>
 
     <!-- Lion face — upper right, fading into darkness -->
     <img src="img/lion-face.png" alt="" style="
       position:absolute;
       top:0; right:0;
-      width:clamp(280px,38vw,540px);
-      height:clamp(280px,38vw,540px);
+      width:clamp(260px,36vw,500px);
+      height:clamp(260px,36vw,500px);
       object-fit:cover;
       object-position:center top;
-      opacity:0.55;
-      mask-image:radial-gradient(ellipse 80% 80% at 70% 20%, rgba(0,0,0,0.9) 30%, transparent 75%);
-      -webkit-mask-image:radial-gradient(ellipse 80% 80% at 70% 20%, rgba(0,0,0,0.9) 30%, transparent 75%);
+      opacity:0.5;
+      mask-image:radial-gradient(ellipse 85% 85% at 75% 20%, rgba(0,0,0,0.95) 25%, transparent 72%);
+      -webkit-mask-image:radial-gradient(ellipse 85% 85% at 75% 20%, rgba(0,0,0,0.95) 25%, transparent 72%);
       z-index:1;
       pointer-events:none;
     "/>
 
-    <!-- Content -->
-    <div class="slide-content" style="width:100%; max-width:820px;">
-
-      <!-- Header -->
-      <div style="margin-bottom:clamp(1.4rem,3vh,2.2rem);">
-        <div style="font-size:clamp(0.62rem,0.9vw,0.76rem); font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.35); margin-bottom:0.5rem;">The Lion's Den Framework</div>
-        <div style="font-family:'Bebas Neue',sans-serif; font-size:clamp(3.2rem,6.5vw,5.5rem); letter-spacing:0.12em; line-height:1; color:var(--gold);">WHIP</div>
-        <div style="width:48px; height:2px; background:var(--gold); margin-top:0.6rem; opacity:0.6;"></div>
-      </div>
+    <div class="slide-content">
+      <div class="stage-badge" style="background:#6b7280;">Stage 1</div>
+      <h3 class="stage-name">SPACE</h3>
+      <div class="rule" style="background:#6b7280;"></div>
 
       <!-- WHIP rows -->
-      <div style="display:flex; flex-direction:column; gap:clamp(10px,1.8vh,18px);">
+      <div style="display:flex; flex-direction:column; gap:clamp(8px,1.4vh,14px); margin-top:clamp(0.6rem,1.2vh,1rem);">
 
         <!-- W -->
-        <div style="display:grid; grid-template-columns:clamp(44px,5vw,64px) clamp(100px,12vw,150px) 1fr; align-items:center; gap:clamp(14px,2vw,28px); padding:clamp(10px,1.4vh,16px) 0; border-bottom:1px solid rgba(255,255,255,0.07);">
-          <div style="font-family:'Bebas Neue',sans-serif; font-size:clamp(2.6rem,5vw,4.2rem); color:var(--gold); line-height:1;">W</div>
-          <div style="font-family:'Bebas Neue',sans-serif; font-size:clamp(1.3rem,2.2vw,1.9rem); letter-spacing:0.06em; color:var(--white); line-height:1;">WHY</div>
-          <div style="font-size:clamp(0.82rem,1.1vw,0.97rem); color:rgba(255,255,255,0.55); line-height:1.5;">Uncover the deep conviction that drives a man to become who he was made to be.</div>
+        <div style="display:grid; grid-template-columns:clamp(38px,4vw,54px) clamp(90px,11vw,140px) 1fr; align-items:center; gap:clamp(12px,1.8vw,24px); padding:clamp(8px,1.2vh,13px) 0; border-bottom:1px solid rgba(255,255,255,0.07);">
+          <div style="font-family:'Bebas Neue',sans-serif; font-size:clamp(2.2rem,4.2vw,3.6rem); color:var(--gold); line-height:1;">W</div>
+          <div style="font-family:'Bebas Neue',sans-serif; font-size:clamp(1.15rem,2vw,1.7rem); letter-spacing:0.06em; color:var(--white); line-height:1;">WHY</div>
+          <div style="font-size:clamp(0.8rem,1.05vw,0.94rem); color:rgba(255,255,255,0.55); line-height:1.5;">Uncover the deep conviction that drives a man to become who he was made to be.</div>
         </div>
 
         <!-- H -->
-        <div style="display:grid; grid-template-columns:clamp(44px,5vw,64px) clamp(100px,12vw,150px) 1fr; align-items:center; gap:clamp(14px,2vw,28px); padding:clamp(10px,1.4vh,16px) 0; border-bottom:1px solid rgba(255,255,255,0.07);">
-          <div style="font-family:'Bebas Neue',sans-serif; font-size:clamp(2.6rem,5vw,4.2rem); color:var(--gold); line-height:1;">H</div>
-          <div style="font-family:'Bebas Neue',sans-serif; font-size:clamp(1.3rem,2.2vw,1.9rem); letter-spacing:0.06em; color:var(--white); line-height:1;">HOW</div>
-          <div style="font-size:clamp(0.82rem,1.1vw,0.97rem); color:rgba(255,255,255,0.55); line-height:1.5;">The specific tools, frameworks, and strategies that produce real results in your home.</div>
+        <div style="display:grid; grid-template-columns:clamp(38px,4vw,54px) clamp(90px,11vw,140px) 1fr; align-items:center; gap:clamp(12px,1.8vw,24px); padding:clamp(8px,1.2vh,13px) 0; border-bottom:1px solid rgba(255,255,255,0.07);">
+          <div style="font-family:'Bebas Neue',sans-serif; font-size:clamp(2.2rem,4.2vw,3.6rem); color:var(--gold); line-height:1;">H</div>
+          <div style="font-family:'Bebas Neue',sans-serif; font-size:clamp(1.15rem,2vw,1.7rem); letter-spacing:0.06em; color:var(--white); line-height:1;">HOW</div>
+          <div style="font-size:clamp(0.8rem,1.05vw,0.94rem); color:rgba(255,255,255,0.55); line-height:1.5;">The specific tools, frameworks, and strategies that produce real results in your home.</div>
         </div>
 
         <!-- I -->
-        <div style="display:grid; grid-template-columns:clamp(44px,5vw,64px) clamp(100px,12vw,150px) 1fr; align-items:center; gap:clamp(14px,2vw,28px); padding:clamp(10px,1.4vh,16px) 0; border-bottom:1px solid rgba(255,255,255,0.07);">
-          <div style="font-family:'Bebas Neue',sans-serif; font-size:clamp(2.6rem,5vw,4.2rem); color:var(--gold); line-height:1;">I</div>
-          <div style="font-family:'Bebas Neue',sans-serif; font-size:clamp(1.3rem,2.2vw,1.9rem); letter-spacing:0.06em; color:var(--white); line-height:1;">IDENTITY</div>
-          <div style="font-size:clamp(0.82rem,1.1vw,0.97rem); color:rgba(255,255,255,0.55); line-height:1.5;">Rebuild the core of who you are — a man who leads, not one who manages conflict.</div>
+        <div style="display:grid; grid-template-columns:clamp(38px,4vw,54px) clamp(90px,11vw,140px) 1fr; align-items:center; gap:clamp(12px,1.8vw,24px); padding:clamp(8px,1.2vh,13px) 0; border-bottom:1px solid rgba(255,255,255,0.07);">
+          <div style="font-family:'Bebas Neue',sans-serif; font-size:clamp(2.2rem,4.2vw,3.6rem); color:var(--gold); line-height:1;">I</div>
+          <div style="font-family:'Bebas Neue',sans-serif; font-size:clamp(1.15rem,2vw,1.7rem); letter-spacing:0.06em; color:var(--white); line-height:1;">IDENTITY</div>
+          <div style="font-size:clamp(0.8rem,1.05vw,0.94rem); color:rgba(255,255,255,0.55); line-height:1.5;">Rebuild the core of who you are — a man who leads, not one who manages conflict.</div>
         </div>
 
         <!-- P -->
-        <div style="display:grid; grid-template-columns:clamp(44px,5vw,64px) clamp(100px,12vw,150px) 1fr; align-items:center; gap:clamp(14px,2vw,28px); padding:clamp(10px,1.4vh,16px) 0;">
-          <div style="font-family:'Bebas Neue',sans-serif; font-size:clamp(2.6rem,5vw,4.2rem); color:var(--gold); line-height:1;">P</div>
-          <div style="font-family:'Bebas Neue',sans-serif; font-size:clamp(1.3rem,2.2vw,1.9rem); letter-spacing:0.06em; color:var(--white); line-height:1;">PRACTICES</div>
-          <div style="font-size:clamp(0.82rem,1.1vw,0.97rem); color:rgba(255,255,255,0.55); line-height:1.5;">Daily disciplines that compound — turning decisions into habits and habits into transformation.</div>
+        <div style="display:grid; grid-template-columns:clamp(38px,4vw,54px) clamp(90px,11vw,140px) 1fr; align-items:center; gap:clamp(12px,1.8vw,24px); padding:clamp(8px,1.2vh,13px) 0;">
+          <div style="font-family:'Bebas Neue',sans-serif; font-size:clamp(2.2rem,4.2vw,3.6rem); color:var(--gold); line-height:1;">P</div>
+          <div style="font-family:'Bebas Neue',sans-serif; font-size:clamp(1.15rem,2vw,1.7rem); letter-spacing:0.06em; color:var(--white); line-height:1;">PRACTICES</div>
+          <div style="font-size:clamp(0.8rem,1.05vw,0.94rem); color:rgba(255,255,255,0.55); line-height:1.5;">Daily disciplines that compound — turning decisions into habits and habits into transformation.</div>
         </div>
 
       </div>
