@@ -1075,8 +1075,20 @@
   <div class="slide" id="s8">
     <div class="slide-content" style="width:100%; display:grid; grid-template-columns:1fr 1fr; gap:clamp(2rem,5vw,5rem); align-items:center;">
       <div style="position:relative; display:flex; align-items:center; justify-content:center;">
-        <img src="img/bart.jpg" alt="Bart Morse" style="width:80%; max-height:62vh; object-fit:cover; object-position:top; display:block;" />
-        <div style="position:absolute;bottom:0;left:0;right:0;height:40%;background:linear-gradient(to top,rgba(8,8,8,1),transparent);"></div>
+        <img src="img/bart.jpg" alt="Bart Morse" style="width:80%; max-height:62vh; object-fit:cover; object-position:top; display:block; position:relative; z-index:2;" />
+        <div style="position:absolute;bottom:0;left:0;right:0;height:40%;background:linear-gradient(to top,rgba(8,8,8,1),transparent); z-index:3;"></div>
+        <!-- Instagram grid — overlapping bottom of photo -->
+        <img src="img/bart-instagram.png" alt="Bart's Instagram" style="
+          position:absolute;
+          bottom:-60px;
+          left:50%;
+          transform:translateX(-50%);
+          width:52%;
+          border-radius:12px;
+          box-shadow:0 8px 40px rgba(0,0,0,0.6);
+          z-index:4;
+          border:1px solid rgba(255,255,255,0.12);
+        "/>
       </div>
       <div>
         <div class="eyebrow">Your Coach</div>
