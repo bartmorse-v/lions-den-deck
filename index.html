@@ -161,15 +161,31 @@
       z-index: 100;
     }
 
-    #arrow-hint {
+    #btn-prev, #btn-next {
       position: fixed;
-      bottom: 24px;
-      left: 32px;
-      font-size: 0.72rem;
-      letter-spacing: 0.08em;
-      color: rgba(255,255,255,0.25);
+      top: 50%;
+      transform: translateY(-50%);
       z-index: 100;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.18);
+      color: rgba(255,255,255,0.7);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
     }
+    #btn-prev:hover, #btn-next:hover {
+      background: rgba(241,196,15,0.15);
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+    #btn-prev { left: 16px; }
+    #btn-next { right: 16px; }
 
     /* ─── Progress bar ───────────────────────────── */
     #progress {
@@ -1069,7 +1085,8 @@
 </div>
 
 <div id="slide-counter">1 / 10</div>
-<div id="arrow-hint">← → or click</div>
+<button id="btn-prev" onclick="goTo(current - 1)" aria-label="Previous slide">&#8592;</button>
+<button id="btn-next" onclick="goTo(current + 1)" aria-label="Next slide">&#8594;</button>
 <div id="progress" style="width:11.1%"></div>
 
 <script>
@@ -1100,8 +1117,14 @@
     }
   });
 
-  // Click anywhere on slide to advance (but not on nav dots)
-  document.getElementById('deck').addEventListener('click', () => goTo(current + 1));
+  // Update button visibility
+  function updateButtons() {
+    document.getElementById('btn-prev').style.opacity = current === 0 ? '0.2' : '1';
+    document.getElementById('btn-next').style.opacity = current === slides.length - 1 ? '0.2' : '1';
+  }
+  const _goTo = goTo;
+  goTo = function(n) { _goTo(n); updateButtons(); }
+  updateButtons();
 </script>
 
 </body>
